@@ -25,6 +25,10 @@ const expenseList = document.getElementById("expense-list");
 
 const emptyMessage = document.getElementById("empty-message");
 
+const overallTotal = document.getElementById("overall-total");
+
+const expenseCount = document.getElementById("expense-count");
+
 /* =========================
    Render Expenses
 ========================= */
@@ -39,6 +43,17 @@ function renderExpenses() {
   }
 
   emptyMessage.style.display = "none";
+  /* =========================
+   Update Totals
+========================= */
+
+  const total = expenses.reduce(function (sum, expense) {
+    return sum + expense.amount;
+  }, 0);
+
+  overallTotal.textContent = `$${total.toFixed(2)}`;
+
+  expenseCount.textContent = expenses.length;
 
   expenses.forEach(function (expense) {
     const expenseItem = document.createElement("div");
