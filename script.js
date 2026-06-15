@@ -45,6 +45,8 @@ function renderExpenses() {
   }
 
   emptyMessage.style.display = "none";
+
+  
   /* =========================
    Update Totals
 ========================= */
@@ -80,25 +82,39 @@ function renderExpenses() {
 
     categoryTotals.appendChild(categoryItem);
   });
-  
+
   expenses.forEach(function (expense) {
     const expenseItem = document.createElement("div");
 
     expenseItem.classList.add("expense-item");
 
-    expenseItem.innerHTML = `
-            <div>
-                <strong>${expense.description}</strong>
-                -
-                $${expense.amount.toFixed(2)}
-                -
-                ${expense.category}
-                -
-                ${expense.date}
-            </div>
-        `;
+expenseItem.innerHTML = `
+        <div>
+            <strong>${expense.description}</strong>
+            -
+            $${expense.amount.toFixed(2)}
+            -
+            ${expense.category}
+            -
+            ${expense.date}
+        </div>
 
-    expenseList.appendChild(expenseItem);
+        <button class="delete-button">
+            Delete
+        </button>
+    `;
+
+expenseList.appendChild(expenseItem);
+
+const deleteButton = expenseItem.querySelector(".delete-button");
+
+deleteButton.addEventListener("click", function () {
+  expenses = expenses.filter(function (item) {
+    return item.id !== expense.id;
+  });
+
+  renderExpenses();
+});
   });
 }
 /* =========================
