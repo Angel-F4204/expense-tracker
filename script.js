@@ -29,6 +29,8 @@ const overallTotal = document.getElementById("overall-total");
 
 const expenseCount = document.getElementById("expense-count");
 
+const categoryTotals = document.getElementById("category-totals");
+
 /* =========================
    Render Expenses
 ========================= */
@@ -55,6 +57,30 @@ function renderExpenses() {
 
   expenseCount.textContent = expenses.length;
 
+  /* =========================
+   Update Category Totals
+========================= */
+
+  categoryTotals.innerHTML = "";
+
+  const totalsByCategory = expenses.reduce(function (totals, expense) {
+    if (totals[expense.category] === undefined) {
+      totals[expense.category] = 0;
+    }
+
+    totals[expense.category] += expense.amount;
+
+    return totals;
+  }, {});
+
+  Object.keys(totalsByCategory).forEach(function (category) {
+    const categoryItem = document.createElement("li");
+
+    categoryItem.textContent = `${category}: $${totalsByCategory[category].toFixed(2)}`;
+
+    categoryTotals.appendChild(categoryItem);
+  });
+  
   expenses.forEach(function (expense) {
     const expenseItem = document.createElement("div");
 
