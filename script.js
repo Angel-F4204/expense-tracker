@@ -33,6 +33,8 @@ const categoryTotals = document.getElementById("category-totals");
 
 const filterCategory = document.getElementById("filter-category");
 
+const sortOption = document.getElementById("sort-option");
+
 /* =========================
    Render Expenses
 ========================= */
@@ -93,6 +95,27 @@ function renderExpenses() {
   if (filterCategory.value !== "All") {
     filteredExpenses = expenses.filter(function (expense) {
       return expense.category === filterCategory.value;
+    });
+  }
+  /* =========================
+   Sort Expenses
+========================= */
+
+  if (sortOption.value === "amount-asc") {
+    filteredExpenses.sort(function (a, b) {
+      return a.amount - b.amount;
+    });
+  } else if (sortOption.value === "amount-desc") {
+    filteredExpenses.sort(function (a, b) {
+      return b.amount - a.amount;
+    });
+  } else if (sortOption.value === "date-asc") {
+    filteredExpenses.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+  } else if (sortOption.value === "date-desc") {
+    filteredExpenses.sort(function (a, b) {
+      return new Date(b.date) - new Date(a.date);
     });
   }
 
@@ -200,4 +223,11 @@ expenseForm.addEventListener("submit", function (event) {
   filterCategory.addEventListener("change", function () {
     renderExpenses();
   });
+});
+/* =========================
+   Sort Changes
+========================= */
+
+sortOption.addEventListener("change", function () {
+  renderExpenses();
 });
