@@ -31,6 +31,8 @@ const expenseCount = document.getElementById("expense-count");
 
 const categoryTotals = document.getElementById("category-totals");
 
+const filterCategory = document.getElementById("filter-category");
+
 /* =========================
    Render Expenses
 ========================= */
@@ -46,7 +48,6 @@ function renderExpenses() {
 
   emptyMessage.style.display = "none";
 
-  
   /* =========================
    Update Totals
 ========================= */
@@ -83,12 +84,24 @@ function renderExpenses() {
     categoryTotals.appendChild(categoryItem);
   });
 
-  expenses.forEach(function (expense) {
+  /* =========================
+   Filter Expenses
+========================= */
+
+  let filteredExpenses = expenses;
+
+  if (filterCategory.value !== "All") {
+    filteredExpenses = expenses.filter(function (expense) {
+      return expense.category === filterCategory.value;
+    });
+  }
+
+  filteredExpenses.forEach(function (expense) {
     const expenseItem = document.createElement("div");
 
     expenseItem.classList.add("expense-item");
 
-expenseItem.innerHTML = `
+    expenseItem.innerHTML = `
         <div>
             <strong>${expense.description}</strong>
             -
@@ -104,17 +117,17 @@ expenseItem.innerHTML = `
         </button>
     `;
 
-expenseList.appendChild(expenseItem);
+    expenseList.appendChild(expenseItem);
 
-const deleteButton = expenseItem.querySelector(".delete-button");
+    const deleteButton = expenseItem.querySelector(".delete-button");
 
-deleteButton.addEventListener("click", function () {
-  expenses = expenses.filter(function (item) {
-    return item.id !== expense.id;
-  });
+    deleteButton.addEventListener("click", function () {
+      expenses = expenses.filter(function (item) {
+        return item.id !== expense.id;
+      });
 
-  renderExpenses();
-});
+      renderExpenses();
+    });
   });
 }
 /* =========================
@@ -179,4 +192,12 @@ expenseForm.addEventListener("submit", function (event) {
   // Clear form
 
   expenseForm.reset();
+
+  /* =========================
+   Filter Changes
+========================= */
+
+  filterCategory.addEventListener("change", function () {
+    renderExpenses();
+  });
 });
